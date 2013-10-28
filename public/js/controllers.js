@@ -8,11 +8,27 @@ angular.module('myApp.controllers', []).
       $scope.name = data.name;
     });
   }).
-  controller('MyCtrl1', function ($scope, socket) {
-    socket.on('send:time', function (data) {
-      $scope.time = data.time;
+  controller('ChatCtrl', function ($scope, socket) {
+    function message(obj){
+      var el = document.createElement('p');
+      el.innerHTML = '<em>' +  esc(obj.text) + '</em>'
+      document.getElementById('chat').appendChild(el);
+      document.getElementById('chat').scrollTop = 1000000;
+    }
+
+    function esc(msg){
+      return msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
+
+    twSocket.on('message', function(obj){
+      message(obj);
     });
   }).
-  controller('MyCtrl2', function ($scope) {
-    // write Ctrl here
+
+  controller('DeliveryCtrl', function ($scope, socket) {
+    $scope.submit = function() {
+      if (this.text) {
+        twSocket.send(this.text);
+      }
+    };
   });

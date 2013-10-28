@@ -13,17 +13,15 @@ angular.module('myApp', [
 ]).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider.
-    when('/view1', {
-      templateUrl: 'partials/partial1',
-      controller: 'MyCtrl1'
-    }).
-    when('/view2', {
-      templateUrl: 'partials/partial2',
-      controller: 'MyCtrl2'
+    when('/chat', {
+      templateUrl: 'partials/chat',
+      controller: 'ChatCtrl'
     }).
     otherwise({
-      redirectTo: '/view1'
+      redirectTo: '/chat'
     });
 
   $locationProvider.html5Mode(true);
 });
+
+var twSocket = io.connect('http://localhost:3000');
