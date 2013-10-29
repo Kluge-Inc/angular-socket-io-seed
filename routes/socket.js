@@ -11,6 +11,7 @@ module.exports = function (socket) {
 
   socket.on('message', function (data) {
     console.log(" [s] Message received from socket: %s", data);
+    exchangeGlobal.publish('', data);
   });
 
 };
