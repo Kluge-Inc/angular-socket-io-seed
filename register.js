@@ -28,7 +28,7 @@ amqpConnection.on('ready', function(){
     });
 
     // Create personal queue
-    amqpConnection.queue(twPersonalQueue, {exclusive: false}, // FIXME: exclusive flag should be set, but it breaks tw-registration
+    amqpConnection.queue(twPersonalQueue, {exclusive: false},
                      function(queue){
 
         console.log(' [*] Waiting for messages. To exit press CTRL+C')
