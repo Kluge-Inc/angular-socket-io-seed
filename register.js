@@ -11,10 +11,10 @@ var
 
 // Configuration params
 var
-    amqpHost = '192.168.9.118',
+    amqpHost = 'localhost',
     twRegistrationQueue = 'talkwut-register',
     twUserName = 'giko',
-    twPersonalQueue = 'tw-client-' + Math.random();
+    twPersonalQueue = 'tw-clie444nt-' + Math.random();
 
 
 // Open amqp connection
@@ -28,16 +28,14 @@ amqpConnection.on('ready', function(){
     });
 
     // Create personal queue
-    amqpConnection.queue(twPersonalQueue, {exclusive: true},
+    amqpConnection.queue(twPersonalQueue, {exclusive: false}, // FIXME: exclusive flag should be set, but it breaks tw-registration
                      function(queue){
 
         console.log(' [*] Waiting for messages. To exit press CTRL+C')
         console.log(' [*] Personal queue has been created for this server: %s', twPersonalQueue)
 
         queue.subscribe(function(msg){                
-            messageText = msg.data.toString('utf-8')
-            socketioExchange.emit('message', { text: messageText });
-          
+            messageText = msg.data.toString('utf-8');
             console.log(" [m] Message received: %s", messageText);
         });
     })
@@ -45,7 +43,7 @@ amqpConnection.on('ready', function(){
 
     var TwCore = builder.build("talkwut.core");
     var regRequest = new TwCore.RegistrationRequest(twUserName, twPersonalQueue);
-    registrationExchange.publish(twRegistrationQueue, regRequest);
+    registrationExchange.publish(twRegistrationQueue, regRequest.toBuffer());
 });
 
 // ////
